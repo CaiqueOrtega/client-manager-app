@@ -1,24 +1,34 @@
-'use client';
+import { AuthService } from '@/lib/firebase/service';
 import { useState } from 'react';
-import { AuthService } from '../service/auth.service';
+import { AuthState } from './types';
 
-export const useAuth = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+export function useAuth() {
+  const [authState, setAuthState] = useState<AuthState>({
+    user: null,
+    loading: false,
+    error: null,
+  });
 
-  const loginWithGoogle = async () => {
-    setLoading(true);
-    setError(null);
+  const signInWithGoogle = async () => {
+    setAuthState((prev) => ({ ...prev, loading: true, error: null }));
 
-    const { user, error } = await AuthService.signInWithGoogle();
-
-    setLoading(false);
-    if (error) {
-      setError(error);
-      return null;
+    try {
+      const user = await AuthService.signInWithGoogle();
+      setAuthState({ user, loading: false, error: null });
+      return user;
+    } catch (error) {
+      const authError = error instanceof Error ? error : new Error('Unknown error');
+      setAuthState({
+        user: null,
+        loading: false,
+        error: authError, // Aqui você já garante que é um Error
+      });
+      throw authError;
     }
-    return user;
   };
 
-  return { loginWithGoogle, loading, error };
-};
+  return {
+    ...authState,
+    signInWithGoogle,
+  };
+}
