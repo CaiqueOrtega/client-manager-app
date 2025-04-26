@@ -1,0 +1,56 @@
+# Diretórios de dependências e build
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+.jest-test-results/
+.parcel-cache/
+.webpack/
+.rollup/
+
+# Arquivos estáticos e públicos
+public/
+**/*.ico
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.svg
+**/*.webp
+
+# Arquivos de log
+*.log
+
+# Arquivos de lock e configs que não precisam ser formatados
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+*.config.js
+*.config.cjs
+*.config.mjs
+*.config.ts
+*.d.ts
+
+# Configs de editor
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Arquivos temporários e backups
+*.swp
+*.bak
+*.tmp
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Documentos e licenças
+LICENSE
+README.md
+
+# Arquivos temporários de cache do Node.js
+.npm/
+.pnpm-store/
