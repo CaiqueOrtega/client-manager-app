@@ -1,11 +1,12 @@
-import { getApp, getApps, initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import firebaseConfig from './config';
+import { getApps, initializeApp } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { firebaseServerConfig } from './config';
 
-export const getFirebaseApp = () => {
-  return getApps().length ? getApp() : initializeApp(firebaseConfig);
+export const getFirebaseServerApp = () => {
+  if (getApps().length === 0) {
+    return initializeApp(firebaseServerConfig);
+  }
+  return getApps()[0];
 };
 
-export const getServerAuth = () => getAuth(getFirebaseApp());
-export const getServerDb = () => getFirestore(getFirebaseApp());
+export const auth = getAuth(getFirebaseServerApp());

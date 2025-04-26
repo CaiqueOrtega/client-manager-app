@@ -1,4 +1,4 @@
-import { AuthService } from '@/lib/firebase/service';
+import { AuthClientService } from '@/lib/firebase/service/auth/client.service';
 import { useState } from 'react';
 import { AuthState } from './types';
 
@@ -13,7 +13,7 @@ export function useAuth() {
     setAuthState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
-      const user = await AuthService.signInWithGoogle();
+      const user = await AuthClientService.signInWithGoogle();
       setAuthState({ user, loading: false, error: null });
       return user;
     } catch (error) {
@@ -21,7 +21,7 @@ export function useAuth() {
       setAuthState({
         user: null,
         loading: false,
-        error: authError, // Aqui você já garante que é um Error
+        error: authError,
       });
       throw authError;
     }

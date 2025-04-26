@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../client';
+import { db } from '../../client';
 
 export const UserService = {
   async createIfNotExists(user: User) {
