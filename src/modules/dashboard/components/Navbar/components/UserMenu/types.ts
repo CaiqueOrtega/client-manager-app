@@ -1,11 +1,7 @@
-import { User } from 'firebase/auth';
-
 export interface UserMenuProps {
-  user: User | null;
   photoURL?: string | null;
   fontSize?: FontSize;
   size?: number;
-  handleLogout: () => void;
 }
 
 export type FontSize = 'small' | 'medium' | 'large';

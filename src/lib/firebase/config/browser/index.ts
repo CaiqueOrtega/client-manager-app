@@ -1,9 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, connectAuthEmulator, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
-import { firebaseClientConfig } from './config';
+import { firebaseBrowserConfig } from '..';
 
-const app = initializeApp(firebaseClientConfig);
+const app = initializeApp(firebaseBrowserConfig);
 
 const auth = getAuth(app);
 const db = getFirestore(app);

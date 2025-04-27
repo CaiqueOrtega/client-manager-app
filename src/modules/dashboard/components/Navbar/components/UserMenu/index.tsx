@@ -9,19 +9,18 @@ import { useState } from 'react';
 import { getInitials } from '@/modules/dashboard/components/Navbar/utils/getInitials';
 import { Switch } from '@/modules/shared/components/Switch';
 import { useDashboardContext } from '@/modules/dashboard/context/DashboardProvider';
+import { useAuthContext } from '@/modules/dashboard/context/AuthProvider';
 
-export function UserMenu({
-  user,
-  fontSize = DEFAULT_FONT_SIZE,
-  size = DEFAULT_SIZE,
-  handleLogout,
-}: UserMenuProps) {
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+export function UserMenu({ fontSize = DEFAULT_FONT_SIZE, size = DEFAULT_SIZE }: UserMenuProps) {
+  const { user, loading, error, logout } = useAuthContext();
   const {
     navbarProps: { showDashboardInfo, setShowDashboardInfo },
   } = useDashboardContext();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  if (!user) return <LoadingUserMenu />;
+  if (loading) return <LoadingUserMenu />;
+  if (error) return <div>Erro: {error}</div>;
+  if (!user) return null;
 
   return (
     <>
@@ -29,7 +28,7 @@ export function UserMenu({
         email={user.email!}
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
-        handleLogout={handleLogout}
+        handleLogout={logout}
       />
 
       <Dropdown

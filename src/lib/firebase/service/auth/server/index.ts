@@ -1,5 +1,5 @@
-import { getFirebaseServerApp } from '@/lib/firebase/server';
-import { auth } from '@/lib/firebase/server';
+import { getFirebaseServerApp } from '@/lib/firebase/config/server';
+import { auth } from '@/lib/firebase/config/server';
 import { DecodedIdToken } from 'firebase-admin/auth';
 
 export const AuthServerService = {

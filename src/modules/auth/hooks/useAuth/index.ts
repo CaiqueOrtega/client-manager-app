@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { AuthClientService } from '@/lib/firebase/service/auth/client.service';
+import { AuthClientService } from '@/lib/firebase/service/auth/browser';
 import { AuthState } from './types';
 
 export function useAuth() {

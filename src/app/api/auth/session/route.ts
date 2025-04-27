@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { AuthServerService } from '@/lib/firebase/service/auth/server.service';
+import { AuthServerService } from '@/lib/firebase/service/auth/server';
 
 export async function POST(request: Request) {
   try {

@@ -1,14 +1,15 @@
+import { db } from '@/lib/firebase/config/browser';
+import { handleError } from '@/lib/firebase/utils/errorHandler';
 import { User } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../client';
 
 export const UserService = {
   async createIfNotExists(user: User) {
-    const userRef = doc(db, 'users', user.uid);
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      const snapshot = await getDoc(userRef);
 
-    const snapshot = await getDoc(userRef);
-    if (!snapshot.exists()) {
-      try {
+      if (!snapshot.exists()) {
         await setDoc(userRef, {
           uid: user.uid,
           email: user.email,
@@ -17,11 +18,9 @@ export const UserService = {
           createdAt: serverTimestamp(),
           lastLogin: serverTimestamp(),
         });
-      } catch (error) {
-        console.error('Erro ao criar documento no Firestore:', error);
       }
-    } else {
-      console.log('Usuário já existe no Firestore.');
+    } catch (error) {
+      handleError(error, 'Não foi possível criar o documento do usuário.');
     }
   },
 };

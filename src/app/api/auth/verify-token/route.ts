@@ -1,4 +1,4 @@
-import { AuthServerService } from '@/lib/firebase/service/auth/server.service';
+import { AuthServerService } from '@/lib/firebase/service/auth/server';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {

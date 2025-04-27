@@ -1,6 +1,6 @@
 import { getApps, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { firebaseServerConfig } from './config';
+import { firebaseServerConfig } from '..';
 
 export const getFirebaseServerApp = () => {
   if (getApps().length === 0) {

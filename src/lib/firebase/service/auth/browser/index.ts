@@ -1,7 +1,7 @@
 import { getIdToken, onAuthStateChanged, signInWithPopup, signOut, User } from 'firebase/auth';
-import { UserService } from '../user/user.service';
-import { auth, googleProvider } from '../../client';
-import { handleError } from '../../utils/errorHandler';
+import { UserService } from '../../user/browser';
+import { handleError } from '../../../utils/errorHandler';
+import { auth, googleProvider } from '@/lib/firebase/config/browser';
 
 export const AuthClientService = {
   async signInWithGoogle() {
@@ -48,7 +48,7 @@ export const AuthClientService = {
     }
   },
 
-  getCurrentUser(): Promise<User> {
+  getCurrentAuth(): Promise<User> {
     return new Promise((resolve, reject) => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
