@@ -1,42 +1,53 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {
-  const sessionToken = request.cookies.get('session')?.value;
-  const { pathname } = request.nextUrl;
+const PUBLIC_ROUTES = new Set(['/login']);
 
-  const protectedRoutes = ['/dashboard'];
-  const publicRoutes = ['/login'];
-
-  if (publicRoutes.includes(pathname)) {
-    return NextResponse.next();
-  }
-
-  if (protectedRoutes.some((route) => pathname.startsWith(route))) {
-    if (!sessionToken) {
-      return NextResponse.redirect(new URL('/login', request.url));
-    }
-
-    try {
-      const apiUrl = new URL('/api/auth/verify-token', request.url);
-      const verifyResponse = await fetch(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${sessionToken}`,
-        },
-      });
-
-      if (!verifyResponse.ok) {
-        throw new Error('Token inválido');
-      }
-
-      return NextResponse.next();
-    } catch (error) {
-      console.error('Erro ao verificar token:', error);
-      const response = NextResponse.redirect(new URL('/login', request.url));
-      response.cookies.delete('session');
-      return response;
-    }
-  }
-
-  return NextResponse.next();
+async function isValidToken(token: string, request: NextRequest): Promise<boolean> {
+  const url = new URL('/api/auth/verify-token', request.url);
+  const res = await fetch(url.toString(), {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.ok;
 }
+
+function redirect(path: string, request: NextRequest) {
+  const to = new URL(path, request.url);
+  return NextResponse.redirect(to);
+}
+
+function redirectToLoginAndClear(request: NextRequest) {
+  const res = redirect('/login', request);
+  res.cookies.delete('session');
+  return res;
+}
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const session = request.cookies.get('session')?.value;
+
+  if (!session) {
+    if (PUBLIC_ROUTES.has(pathname)) {
+      return NextResponse.next();
+    }
+    return redirect('/login', request);
+  }
+
+  if (PUBLIC_ROUTES.has(pathname) || pathname === '/') {
+    return redirect('/dashboard', request);
+  }
+
+  try {
+    if (await isValidToken(session, request)) {
+      return NextResponse.next();
+    }
+    throw new Error('Token inválido');
+  } catch (err) {
+    console.error('Falha ao validar token:', err);
+    return redirectToLoginAndClear(request);
+  }
+}
+
+export const config = {
+  matcher: ['/', '/login', '/dashboard'],
+};
