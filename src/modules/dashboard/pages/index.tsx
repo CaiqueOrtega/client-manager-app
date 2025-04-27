@@ -1,4 +1,5 @@
 'use client';
+import ClientTable from '../components/ClientTable';
 import StatsCard from '../components/StatsCard';
 
 export default function DashboardPage() {
@@ -11,6 +12,7 @@ export default function DashboardPage() {
             <h1 className="text-2xl font-bold text-gray-700">Controle de Clientes</h1>
             <h2 className="text-sm text-[#16C098]">Acompanhe seus clientes</h2>
           </div>
+          <ClientTable />
         </section>
       </div>
     </div>
