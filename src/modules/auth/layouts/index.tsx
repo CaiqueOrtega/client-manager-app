@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Autenticação – ClientManager',
-  description: 'Acesse ou crie sua conta',
+  description: 'Acesse sua conta',
 };
 
 export default function AuthLayout({
