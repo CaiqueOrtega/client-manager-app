@@ -1,7 +1,7 @@
 import { User } from 'firebase/auth';
 
 export type AuthState = {
-  user: User | null;
+  user?: User;
   loading: boolean;
   error: Error | null;
 };

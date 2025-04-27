@@ -1,29 +1,33 @@
-import { AuthClientService } from '@/lib/firebase/service/auth/client.service';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { AuthClientService } from '@/lib/firebase/service/auth/client.service';
 import { AuthState } from './types';
 
 export function useAuth() {
+  const router = useRouter();
   const [authState, setAuthState] = useState<AuthState>({
-    user: null,
+    user: undefined,
     loading: false,
     error: null,
   });
 
+  const setAuthStatus = (status: Partial<AuthState>) => {
+    setAuthState((prev) => ({ ...prev, ...status }));
+  };
+
   const signInWithGoogle = async () => {
-    setAuthState((prev) => ({ ...prev, loading: true, error: null }));
+    setAuthStatus({ loading: true, error: null });
 
     try {
       const user = await AuthClientService.signInWithGoogle();
-      setAuthState({ user, loading: false, error: null });
-      return user;
-    } catch (error) {
-      const authError = error instanceof Error ? error : new Error('Unknown error');
-      setAuthState({
-        user: null,
-        loading: false,
-        error: authError,
-      });
-      throw authError;
+      setAuthStatus({ user, loading: false });
+      router.push('/dashboard');
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Erro desconhecido.');
+      setAuthStatus({ user: undefined, loading: false, error });
+      throw error;
     }
   };
 
