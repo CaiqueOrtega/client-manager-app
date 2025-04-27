@@ -1,6 +1,7 @@
-import { getIdToken, signInWithPopup } from 'firebase/auth';
+import { getIdToken, onAuthStateChanged, signInWithPopup, signOut, User } from 'firebase/auth';
 import { UserService } from '../user/user.service';
 import { auth, googleProvider } from '../../client';
+import { handleError } from '../../utils/errorHandler';
 
 export const AuthClientService = {
   async signInWithGoogle() {
@@ -24,8 +25,39 @@ export const AuthClientService = {
       await UserService.createIfNotExists(user);
       return user;
     } catch (error) {
-      console.error('Erro:', error);
-      throw error;
+      handleError(error, 'Erro ao tentar autenticar com o Google');
     }
+  },
+
+  async logout() {
+    try {
+      await signOut(auth);
+
+      const response = await fetch('/api/auth/session', {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Falha ao encerrar sessão');
+      }
+
+      return true;
+    } catch (error) {
+      handleError(error, 'Erro no logout');
+    }
+  },
+
+  getCurrentUser(): Promise<User> {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          resolve(user);
+        } else {
+          reject(new Error('Nenhum usuário autenticado encontrado.'));
+        }
+        unsubscribe();
+      });
+    });
   },
 };
