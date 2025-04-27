@@ -17,7 +17,7 @@ export function LoginForm() {
       <div className="mt-6 flex flex-col gap-4">
         <button
           type="submit"
-          className={`w-full rounded-xl bg-teal-600 py-3 font-medium text-white transition hover:bg-teal-700 disabled:opacity-60`}
+          className={`w-full cursor-pointer rounded-xl bg-teal-600 py-3 font-medium text-white transition hover:bg-teal-700 disabled:opacity-60`}
         >
           Entrar
         </button>
