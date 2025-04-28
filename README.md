@@ -15,9 +15,15 @@
 ## 📑 Funcionalidades
 
 - **Tela de Login**: Permite login via Google utilizando Firebase Authentication.
+
+![Tela de Login](assets/login-page.png)
+
 - **Lista de Clientes**: Exibe e gerencia clientes, com funcionalidades para:
   - Alternar status entre "ativo" e "inativo".
   - Excluir clientes.
+
+![Tela de Dashboard](assets/dashboard-page.png)
+
 - **Formulário de Cadastro**: Permite adicionar novos clientes à lista com as seguintes informações:
   - Nome
   - CNPJ
