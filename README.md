@@ -57,7 +57,7 @@ console.log('✅ Firebase configurado com emuladores locais');
 ![Modal de Logout](assets/modal-logout.png)
 ![Modal de Cadastro de Cliente](assets/modal-client.png)
 ![Dropdown de Açoes](assets/dropdown-actions.png)
-![Modal de Confirmação de Exclusao](aassets/modal-confirm.png)
+![Modal de Confirmação de Exclusao](assets/modal-confirm.png)
 
 
 
