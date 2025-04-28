@@ -10,8 +10,8 @@ const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
 // comentar as próximas 3 linhas para produção
-//connectAuthEmulator(auth, 'http://localhost:9099');
-//connectFirestoreEmulator(db, 'localhost', 8080);
-//console.log('✅ Firebase configurado com emuladores locais');
+connectAuthEmulator(auth, 'http://localhost:9099');
+connectFirestoreEmulator(db, 'localhost', 8080);
+console.log('✅ Firebase configurado com emuladores locais');
 
 export { auth, db, googleProvider };

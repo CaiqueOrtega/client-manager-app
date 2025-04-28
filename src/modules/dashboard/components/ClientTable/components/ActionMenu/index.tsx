@@ -33,9 +33,9 @@ export function ActionMenu({ clientId, currentStatus }: ActionMenuProps) {
               <span className="text-gray-500">
                 Alterar status para
                 <span
-                  className={`ml-1 ${currentStatus === Status.INACTIVE ? 'text-red-400' : 'text-teal-400'}`}
+                  className={`ml-1 ${currentStatus === Status.ACTIVE ? 'text-red-400' : 'text-teal-400'}`}
                 >
-                  {currentStatus}
+                  {currentStatus === Status.INACTIVE ? 'ativo' : 'inativo'}
                 </span>
               </span>
             ),
