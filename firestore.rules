@@ -8,9 +8,10 @@ service cloud.firestore {
       allow read: if request.auth.uid == userId;
     }
 
-     match /clients/{clientId} {
-        // Apenas o usuário autenticado pode ler e escrever os dados dos seus próprios clientes
-        allow read, write: if request.auth.uid == userId;
+    match /clients/{clientId} {
+      // Permite que o usuário autenticado crie, leia e escreva dados dos seus próprios clientes
+      allow create: if request.auth.uid == request.resource.data.userId;
+      allow read, write: if request.auth.uid == resource.data.userId;
     }
   }
 }

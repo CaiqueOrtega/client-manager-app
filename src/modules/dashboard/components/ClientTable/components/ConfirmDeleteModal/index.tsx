@@ -1,25 +1,30 @@
-'use client';
-
 import { Modal } from '@/modules/shared/components/Modal';
-import { ConfirmLogoutModalProps } from './types';
 
-const ConfirmLogoutModal = ({ isOpen, onClose, handleLogout, email }: ConfirmLogoutModalProps) => {
+export const ConfirmDeleteModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="sm">
-      <div className="space-y-8 px-8 py-10 text-center text-gray-600">
+      <div className="space-y-6 p-12 text-center">
         <div>
-          <h1 className="mb-2 text-2xl font-bold">Tem certeza que deseja sair da conta?</h1>
-
-          <h2 className="text-lg text-gray-500">Sair do CLient Manager como </h2>
-          <h3 className="text-sm text-gray-400">{email}</h3>
+          <h3 className="mb-2 text-xl font-bold text-gray-600">Tem certeza que deseja excluir?</h3>
+          <p className="mb-4 text-gray-500">Esta ação não pode ser desfeita.</p>
         </div>
-
-        <div className="space-y-2">
+        <div className="flex flex-col justify-center gap-2">
           <button
-            onClick={handleLogout}
             className="w-full cursor-pointer rounded-full bg-red-500/90 px-4 py-3 text-white transition hover:bg-red-500"
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
           >
-            Confirmar
+            Excluir
           </button>
           <button
             className="w-full cursor-pointer rounded-full border border-gray-300 px-4 py-3 text-gray-600 transition hover:bg-gray-100"
@@ -32,5 +37,3 @@ const ConfirmLogoutModal = ({ isOpen, onClose, handleLogout, email }: ConfirmLog
     </Modal>
   );
 };
-
-export default ConfirmLogoutModal;

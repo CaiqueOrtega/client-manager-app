@@ -1,42 +1,95 @@
 import { db } from '@/lib/firebase/config/browser';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  query,
+  where,
+  deleteDoc,
+} from 'firebase/firestore';
+import { clientConverter } from './converter';
+import { Client, CreateClient } from './types';
 import { handleError } from '../../../utils/errorHandler';
-import { collection, addDoc, getDocs, doc, updateDoc, query, where } from 'firebase/firestore';
-import { Client } from './types';
+
+const clientsRef = collection(db, 'clients').withConverter(clientConverter);
 
 export const ClientService = {
-  async createClient(client: Client, userId: string): Promise<Client> {
+  async checkExistingCnpj(userId: string, cnpj: string, excludeClientId?: string): Promise<void> {
     try {
-      const clientWithUserId = { ...client, userId };
-      const clientsCollection = collection(db, 'clients');
-      const docRef = await addDoc(clientsCollection, clientWithUserId);
-      const createdClient = { ...clientWithUserId, id: docRef.id };
-      return createdClient;
-    } catch (error) {
-      handleError(error, 'Não foi possível criar o cliente.');
-      throw error;
+      let q = query(clientsRef, where('userId', '==', userId), where('cnpj', '==', cnpj));
+
+      if (excludeClientId) {
+        q = query(q, where('id', '!=', excludeClientId));
+      }
+
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        throw new Error('Já existe um cliente com este CNPJ cadastrado para o seu usuário');
+      }
+    } catch (err) {
+      handleError(err, 'Erro ao verificar CNPJ');
+      throw err;
+    }
+  },
+
+  async createClient(data: CreateClient): Promise<Client> {
+    try {
+      await this.checkExistingCnpj(data.userId, data.cnpj);
+
+      const docRef = await addDoc(clientsRef, data);
+      const snap = await getDoc(docRef.withConverter(clientConverter));
+      if (!snap.exists()) throw new Error('Erro ao criar cliente');
+
+      return snap.data();
+    } catch (err) {
+      handleError(err, 'Falha ao criar cliente');
+      throw err;
     }
   },
 
   async getClients(userId: string): Promise<Client[]> {
     try {
-      const clientsCollection = collection(db, 'clients');
-      const q = query(clientsCollection, where('userId', '==', userId));
-      const snapshot = await getDocs(q);
-      const clients = snapshot.docs.map((doc) => doc.data() as Client);
-      return clients;
-    } catch (error) {
-      handleError(error, 'Não foi possível obter os clientes.');
-      throw error;
+      const q = query(clientsRef, where('userId', '==', userId));
+      const snap = await getDocs(q);
+      return snap.docs.map((d) => d.data());
+    } catch (err) {
+      handleError(err, 'Falha ao listar clientes');
+      throw err;
     }
   },
 
-  async updateClient(clientId: string, clientUpdates: Partial<Client>): Promise<void> {
+  async updateClientStatus(clientId: string, status: string): Promise<Client> {
     try {
-      const clientRef = doc(db, 'clients', clientId);
-      await updateDoc(clientRef, clientUpdates);
-    } catch (error) {
-      handleError(error, 'Não foi possível atualizar o cliente.');
-      throw error;
+      const ref = doc(db, 'clients', clientId).withConverter(clientConverter);
+      await updateDoc(ref, { status });
+
+      const snap = await getDoc(ref);
+      if (!snap.exists()) throw new Error('Cliente não encontrado');
+
+      return snap.data();
+    } catch (err) {
+      handleError(err, 'Falha ao atualizar status do cliente');
+      throw err;
+    }
+  },
+
+  async deleteClient(clientId: string): Promise<Client> {
+    try {
+      const ref = doc(db, 'clients', clientId).withConverter(clientConverter);
+
+      const snap = await getDoc(ref);
+      if (!snap.exists()) throw new Error('Cliente não encontrado');
+
+      const clientToDelete = snap.data();
+      await deleteDoc(ref);
+
+      return clientToDelete;
+    } catch (err) {
+      handleError(err, 'Falha ao excluir cliente');
+      throw err;
     }
   },
 };

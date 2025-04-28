@@ -5,18 +5,18 @@ import { UserMenuProps, fontSizeClasses, DEFAULT_SIZE, DEFAULT_FONT_SIZE } from 
 import { Dropdown } from '@/modules/shared/components/Dropdown';
 import { FaEye, FaEyeSlash, FaSignOutAlt } from 'react-icons/fa';
 import ConfirmLogoutModal from '../ModalLogout';
-import { useState } from 'react';
 import { getInitials } from '@/modules/dashboard/components/Navbar/utils/getInitials';
 import { Switch } from '@/modules/shared/components/Switch';
 import { useDashboardContext } from '@/modules/dashboard/context/DashboardProvider';
 import { useAuthContext } from '@/modules/dashboard/context/AuthProvider';
+import { useModal } from '@/modules/shared/components/Modal/useModal';
 
 export function UserMenu({ fontSize = DEFAULT_FONT_SIZE, size = DEFAULT_SIZE }: UserMenuProps) {
   const { user, loading, error, logout } = useAuthContext();
   const {
     navbarProps: { showDashboardInfo, setShowDashboardInfo },
   } = useDashboardContext();
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const { isOpen, openModal, closeModal } = useModal();
 
   if (loading) return <LoadingUserMenu />;
   if (error) return <div>Erro: {error}</div>;
@@ -26,8 +26,8 @@ export function UserMenu({ fontSize = DEFAULT_FONT_SIZE, size = DEFAULT_SIZE }: 
     <>
       <ConfirmLogoutModal
         email={user.email!}
-        isOpen={isLogoutModalOpen}
-        onClose={() => setIsLogoutModalOpen(false)}
+        isOpen={isOpen}
+        onClose={() => closeModal()}
         handleLogout={logout}
       />
 
@@ -88,7 +88,7 @@ export function UserMenu({ fontSize = DEFAULT_FONT_SIZE, size = DEFAULT_SIZE }: 
             id: 'logout',
             icon: <FaSignOutAlt />,
             content: 'Sair da conta',
-            onClick: () => setIsLogoutModalOpen(true),
+            onClick: () => openModal(),
             customClass: 'text-red-600',
           },
         ]}

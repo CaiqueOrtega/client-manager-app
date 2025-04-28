@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { DropdownItem } from './types';
 
-export function useDropdownController(items: DropdownItem[]) {
+export function useDropdown(items: DropdownItem[]) {
   const [open, setOpen] = useState(false);
   const [highlight, setHighlight] = useState(-1);
   const ref = useRef<HTMLDivElement>(null);

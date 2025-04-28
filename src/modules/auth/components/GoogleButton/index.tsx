@@ -1,10 +1,13 @@
 'use client';
 import { FcGoogle } from 'react-icons/fc';
-import { useAuth } from '@/modules/auth/hooks/useAuth';
 
-export function GoogleButton() {
-  const { signInWithGoogle, loading } = useAuth();
-
+export function GoogleButton({
+  signInWithGoogle,
+  loading,
+}: {
+  signInWithGoogle: () => void;
+  loading: boolean;
+}) {
   return (
     <button
       type="button"

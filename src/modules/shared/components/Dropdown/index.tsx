@@ -1,8 +1,8 @@
 import { DropdownProps } from './types';
-import { useDropdownController } from './useDropdown';
+import { useDropdown } from './useDropdown';
 
 export function Dropdown({ label, items, separators = [], dropdownWidth = 'w-48' }: DropdownProps) {
-  const { open, highlight, setHighlight, toggleOpen, ref } = useDropdownController(items);
+  const { open, highlight, setHighlight, toggleOpen, ref } = useDropdown(items);
 
   return (
     <div ref={ref} className="relative inline-block">

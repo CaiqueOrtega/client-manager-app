@@ -5,11 +5,11 @@ export type InputWithIconProps = {
   type: string;
   placeholder: string;
   icon: IconType;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export type CustomInputProps = InputWithIconProps & {
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   bgColor?: string;
   borderColor?: string;
   iconColor?: string;
@@ -19,4 +19,6 @@ export type CustomInputProps = InputWithIconProps & {
   paddingX?: string;
   inputClassName?: string;
   disabled?: boolean;
+  mask?: string;
+  errorMessage?: string;
 };

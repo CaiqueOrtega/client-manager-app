@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { AuthClientService } from '@/lib/firebase/service/auth/browser';
 import { AuthState } from './types';
+import { FirebaseError } from 'firebase/app'; // Importando o tipo FirebaseError
 
 export function useAuth() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export function useAuth() {
       setAuthStatus({ user, loading: false });
       router.push('/dashboard');
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Erro desconhecido.');
+      const error = err instanceof FirebaseError ? err : new Error('Erro desconhecido.');
       setAuthStatus({ user: undefined, loading: false, error });
       throw error;
     }
