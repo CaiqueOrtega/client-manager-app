@@ -12,18 +12,36 @@
 
 ---
 
+```bash
+# Abra o terminal e execute os seguintes comandos:
+
+# Clone o repositório
+git clone https://github.com/CaiqueOrtega/client-manager-app
+
+# Entre na pasta do projeto
+cd client-manager-app
+
+# Instale as dependências
+npm install
+
+# Rodando o Firebase Emulator
+npm run dev:full
+```
+> ⚠️ ATENÇÃO: Se for rodar sem emulador lembre de comentar em src/lib/firebase/config/browser/index.ts:
+
+```js
+connectAuthEmulator(auth, 'http://localhost:9099');
+connectFirestoreEmulator(db, 'localhost', 8080);
+console.log('✅ Firebase configurado com emuladores locais');
+``` 
+---
+
 ## 📑 Funcionalidades
 
 - **Tela de Login**: Permite login via Google utilizando Firebase Authentication.
-
-![Tela de Login](assets/login-page.png)
-
 - **Lista de Clientes**: Exibe e gerencia clientes, com funcionalidades para:
   - Alternar status entre "ativo" e "inativo".
   - Excluir clientes.
-
-![Tela de Dashboard](assets/dashboard-page.png)
-
 - **Formulário de Cadastro**: Permite adicionar novos clientes à lista com as seguintes informações:
   - Nome
   - CNPJ
@@ -31,6 +49,17 @@
   - Status (ativo/inativo)
 
 ---
+
+# 📸 Imagens e Vídeos do Sistema
+
+![Tela de Login](assets/login-page.png)
+![Tela de Dashboard](assets/dashboard-page.png)
+![Modal de Logout](assets/modal-logout.png)
+![Modal de Cadastro de Cliente](assets/modal-client.png)
+![Dropdown de Açoes](assets/dropdown-actions.png)
+![Modal de Confirmação de Exclusao](aassets/modal-confirm.png)
+
+
 
 ## 👨‍💻 Desenvolvedor
 
